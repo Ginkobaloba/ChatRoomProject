@@ -4,3 +4,9 @@ C:\Users\Drama\OneDrive\Documents\Visual Studio 2015\Projects\ChatServer\bin\Deb
 C:\Users\Drama\OneDrive\Documents\Visual Studio 2015\Projects\ChatServer\bin\Debug\ChatServer.pdb
 C:\Users\Drama\OneDrive\Documents\Visual Studio 2015\Projects\ChatServer\obj\Debug\ChatServer.exe
 C:\Users\Drama\OneDrive\Documents\Visual Studio 2015\Projects\ChatServer\obj\Debug\ChatServer.pdb
+C:\Users\Drama\Desktop\devcodecampprojects\ChatRoomProject\ChatServer\ChatServer\bin\Debug\ChatServer.exe.config
+C:\Users\Drama\Desktop\devcodecampprojects\ChatRoomProject\ChatServer\ChatServer\bin\Debug\ChatServer.exe
+C:\Users\Drama\Desktop\devcodecampprojects\ChatRoomProject\ChatServer\ChatServer\bin\Debug\ChatServer.pdb
+C:\Users\Drama\Desktop\devcodecampprojects\ChatRoomProject\ChatServer\ChatServer\obj\Debug\ChatServer.csprojResolveAssemblyReference.cache
+C:\Users\Drama\Desktop\devcodecampprojects\ChatRoomProject\ChatServer\ChatServer\obj\Debug\ChatServer.exe
+C:\Users\Drama\Desktop\devcodecampprojects\ChatRoomProject\ChatServer\ChatServer\obj\Debug\ChatServer.pdb

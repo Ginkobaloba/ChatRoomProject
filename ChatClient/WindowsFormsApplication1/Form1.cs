@@ -1,10 +1,16 @@
 ﻿using System;
-using System.Windows.Forms;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Net.Sockets;
 using System.Threading;
 
-namespace WindowsApplication2
+namespace ChatClient
 {
     public partial class Form1 : Form
     {
@@ -28,7 +34,7 @@ namespace WindowsApplication2
         {
             readData = "Conected to Chat Server ...";
             msg();
-            clientSocket.Connect("127.0.0.1", 8888);
+            clientSocket.Connect("10.2.20.22", 8888);
             serverStream = clientSocket.GetStream();
 
             byte[] outStream = System.Text.Encoding.ASCII.GetBytes(textBox3.Text + "$");
@@ -45,9 +51,9 @@ namespace WindowsApplication2
             {
                 serverStream = clientSocket.GetStream();
                 int buffSize = 0;
-                byte[] inStream = new byte[10025];
+                byte[] inStream = new byte[65536];
                 buffSize = clientSocket.ReceiveBufferSize;
-                serverStream.Read(inStream, 0, buffSize);
+                serverStream.Read(inStream, 0, inStream.Length);
                 string returndata = System.Text.Encoding.ASCII.GetString(inStream);
                 readData = "" + returndata;
                 msg();
@@ -62,5 +68,41 @@ namespace WindowsApplication2
                 textBox1.Text = textBox1.Text + Environment.NewLine + " >> " + readData;
         }
 
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            readData = "Conected to Chat Server ...";
+            msg();
+            clientSocket.Connect("10.2.20.22", 12000);
+            serverStream = clientSocket.GetStream();
+
+            byte[] outStream = System.Text.Encoding.ASCII.GetBytes(textBox3.Text + "$");
+            serverStream.Write(outStream, 0, outStream.Length);
+            serverStream.Flush();
+
+            Thread ctThread = new Thread(getMessage);
+            ctThread.Start();
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            byte[] outStream = System.Text.Encoding.ASCII.GetBytes(textBox2.Text + "$");
+            serverStream.Write(outStream, 0, outStream.Length);
+            serverStream.Flush();
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

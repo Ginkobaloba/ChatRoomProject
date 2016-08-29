@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Net.Sockets;
+using System.Net;
 using System.Text;
 using System.Collections;
 
@@ -12,7 +13,8 @@ namespace ConsoleApplication1
 
         static void Main(string[] args)
         {
-            TcpListener serverSocket = new TcpListener(8888);
+            IPAddress localAddr = IPAddress.Parse("10.2.20.22");
+            TcpListener serverSocket = new TcpListener(localAddr,12000);
             TcpClient clientSocket = default(TcpClient);
             int counter = 0;
 
@@ -24,7 +26,7 @@ namespace ConsoleApplication1
                 counter += 1;
                 clientSocket = serverSocket.AcceptTcpClient();
 
-                byte[] bytesFrom = new byte[10025];
+                byte[] bytesFrom = new byte[65536];
                 string dataFromClient = null;
 
                 NetworkStream networkStream = clientSocket.GetStream();
@@ -90,7 +92,7 @@ namespace ConsoleApplication1
         private void doChat()
         {
             int requestCount = 0;
-            byte[] bytesFrom = new byte[10025];
+            byte[] bytesFrom = new byte[65536];
             string dataFromClient = null;
             Byte[] sendBytes = null;
             string serverResponse = null;
