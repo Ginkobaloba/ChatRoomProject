@@ -9,51 +9,47 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net.Sockets;
 using System.Threading;
+using System.Net;
 
 namespace ChatClient
 {
-    public partial class Form1 : Form
+    public partial class frmChatClient : Form
     {
-        System.Net.Sockets.TcpClient clientSocket = new System.Net.Sockets.TcpClient();
-        NetworkStream serverStream = default(NetworkStream);
+        TcpClient MessagesSocket = new TcpClient();
+        TcpClient UsersSocket = new TcpClient();
+        NetworkStream MessagesStream = default(NetworkStream);
+        NetworkStream UsersStream = default(NetworkStream);
+        Random random = new Random();
         string readData = null;
+        string userData = null;
 
-        public Form1()
+        public frmChatClient()
         {
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnSendMessage_Click(object sender, EventArgs e)
         {
-            byte[] outStream = System.Text.Encoding.ASCII.GetBytes(textBox2.Text + "$");
-            serverStream.Write(outStream, 0, outStream.Length);
-            serverStream.Flush();
+            byte[] outStream = System.Text.Encoding.ASCII.GetBytes(txtSendMessage.Text + "$");
+            MessagesStream.Write(outStream, 0, outStream.Length);
+            MessagesStream.Flush();
+            txtSendMessage.Clear();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void btnConnectToServer_Click(object sender, EventArgs e)
         {
-            readData = "Conected to Chat Server ...";
-            msg();
-            clientSocket.Connect("10.2.20.22", 8888);
-            serverStream = clientSocket.GetStream();
-
-            byte[] outStream = System.Text.Encoding.ASCII.GetBytes(textBox3.Text + "$");
-            serverStream.Write(outStream, 0, outStream.Length);
-            serverStream.Flush();
-
-            Thread ctThread = new Thread(getMessage);
-            ctThread.Start();
+            LoopConnect();
         }
 
         private void getMessage()
         {
-            while (true)
+            while (MessagesSocket.Connected)
             {
-                serverStream = clientSocket.GetStream();
+                MessagesStream = MessagesSocket.GetStream();
                 int buffSize = 0;
                 byte[] inStream = new byte[65536];
-                buffSize = clientSocket.ReceiveBufferSize;
-                serverStream.Read(inStream, 0, inStream.Length);
+                buffSize = MessagesSocket.ReceiveBufferSize;
+                MessagesStream.Read(inStream, 0, inStream.Length);
                 string returndata = System.Text.Encoding.ASCII.GetString(inStream);
                 readData = "" + returndata;
                 msg();
@@ -65,44 +61,70 @@ namespace ChatClient
             if (this.InvokeRequired)
                 this.Invoke(new MethodInvoker(msg));
             else
-                textBox1.Text = textBox1.Text + Environment.NewLine + " >> " + readData;
+                txtChatWindow.Text = txtChatWindow.Text + Environment.NewLine + " >> " + readData;
         }
-
-        private void Form1_Load(object sender, EventArgs e)
+        private void LoopConnect()
         {
+            int attempts = 0;
 
-        }
-
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button2_Click_1(object sender, EventArgs e)
-        {
+            while (!MessagesSocket.Connected && !UsersSocket.Connected)
+            {
+                try
+                {
+                    attempts++;
+                    MessagesSocket.Connect("10.2.20.11", 12000);
+                    UsersSocket.Connect("10.2.20.11", 12000);
+                }
+                catch (SocketException)
+                {
+                    txtChatWindow.Clear();
+                    txtChatWindow.AppendText("Connection attempts: " + attempts.ToString());
+                }
+            }
+            txtChatWindow.Clear();
             readData = "Conected to Chat Server ...";
             msg();
-            clientSocket.Connect("10.2.20.22", 12000);
-            serverStream = clientSocket.GetStream();
+            UsersStream = UsersSocket.GetStream();
+            MessagesStream = MessagesSocket.GetStream();
+            btnConnectToServer.Visible = false;
 
-            byte[] outStream = System.Text.Encoding.ASCII.GetBytes(textBox3.Text + "$");
-            serverStream.Write(outStream, 0, outStream.Length);
-            serverStream.Flush();
+            byte[] outStreamMessage = Encoding.ASCII.GetBytes(txtUserName.Text + "$");
+            byte[] outStreamWindow = Encoding.ASCII.GetBytes(random.Next(1, 25000).ToString());
+            UsersStream.Write(outStreamWindow, 0, outStreamWindow.Length);
+            MessagesStream.Write(outStreamMessage, 0, outStreamMessage.Length);
+            UsersStream.Flush();
+            MessagesStream.Flush();
 
             Thread ctThread = new Thread(getMessage);
+            Thread GTAutoThread = new Thread(GetUserNames);
             ctThread.Start();
-        }
+            GTAutoThread.Start();
+               }
+            private void GetUserNames()
+                {
+            while (UsersSocket.Connected)
+            {
+                UsersStream = UsersSocket.GetStream();
+                int buffSize = 0;
+                byte[] inStream = new byte[65536];
+                buffSize = UsersSocket.ReceiveBufferSize;
+                UsersStream.Read(inStream, 0, inStream.Length);
+                userData = Encoding.ASCII.GetString(inStream);
+                setUserNames();
+            }
 
-        private void button1_Click_1(object sender, EventArgs e)
+          }
+        private void setUserNames()
         {
-            byte[] outStream = System.Text.Encoding.ASCII.GetBytes(textBox2.Text + "$");
-            serverStream.Write(outStream, 0, outStream.Length);
-            serverStream.Flush();
+            if (this.InvokeRequired)
+                this.Invoke(new MethodInvoker(setUserNames));
+            else
+                lblUserNames.Text = userData;
         }
 
-        private void textBox3_TextChanged(object sender, EventArgs e)
+        private void lstUsersConnected_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }
     }
-}
+    }

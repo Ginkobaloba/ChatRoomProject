@@ -13,10 +13,10 @@ namespace ConsoleApplication1
 
         static void Main(string[] args)
         {
-            IPAddress localAddr = IPAddress.Parse("10.2.20.22");
-            TcpListener serverSocket = new TcpListener(localAddr,12000);
+            TcpListener serverSocket = new TcpListener(IPAddress.Any,12000);
             TcpClient clientSocket = default(TcpClient);
             int counter = 0;
+            int result = 0;
 
             serverSocket.Start();
             Console.WriteLine("Chat Server Started ....");
@@ -33,20 +33,17 @@ namespace ConsoleApplication1
                 networkStream.Read(bytesFrom, 0, (int)clientSocket.ReceiveBufferSize);
                 dataFromClient = System.Text.Encoding.ASCII.GetString(bytesFrom);
                 dataFromClient = dataFromClient.Substring(0, dataFromClient.IndexOf("$"));
-
+                dataFromClient = dataFromClient + counter;
                 clientsList.Add(dataFromClient, clientSocket);
 
-                broadcast(dataFromClient + " Joined ", dataFromClient, false);
-
-                Console.WriteLine(dataFromClient + " Joined chat room ");
+                if (int.TryParse(dataFromClient, out result))
+                {
+                    broadcast(dataFromClient + " Joined ", dataFromClient, false);
+                    Console.WriteLine(dataFromClient + " Joined chat room ");
+                }
                 handleClinet client = new handleClinet();
                 client.startClient(clientSocket, dataFromClient, clientsList);
             }
-
-            clientSocket.Close();
-            serverSocket.Stop();
-            Console.WriteLine("exit");
-            Console.ReadLine();
         }
 
         public static void broadcast(string msg, string uName, bool flag)
