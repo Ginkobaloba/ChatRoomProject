@@ -35,8 +35,8 @@
             this.btnConnectToServer = new System.Windows.Forms.Button();
             this.lblSetUserName = new System.Windows.Forms.Label();
             this.lblUserNames = new System.Windows.Forms.Label();
-            this.txtUsers = new System.Windows.Forms.TextBox();
             this.lblConnectedUsers = new System.Windows.Forms.Label();
+            this.txtConnectedUsers = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // txtChatWindow
@@ -51,31 +51,33 @@
             // 
             this.txtSendMessage.Location = new System.Drawing.Point(20, 606);
             this.txtSendMessage.Name = "txtSendMessage";
-            this.txtSendMessage.Size = new System.Drawing.Size(649, 26);
+            this.txtSendMessage.Size = new System.Drawing.Size(649, 38);
             this.txtSendMessage.TabIndex = 1;
+            this.txtSendMessage.Visible = false;
             // 
             // txtUserName
             // 
-            this.txtUserName.Location = new System.Drawing.Point(313, 33);
+            this.txtUserName.Location = new System.Drawing.Point(313, 56);
             this.txtUserName.Name = "txtUserName";
-            this.txtUserName.Size = new System.Drawing.Size(356, 26);
+            this.txtUserName.Size = new System.Drawing.Size(356, 38);
             this.txtUserName.TabIndex = 0;
             // 
             // btnSendMessage
             // 
-            this.btnSendMessage.Location = new System.Drawing.Point(465, 638);
+            this.btnSendMessage.Location = new System.Drawing.Point(675, 608);
             this.btnSendMessage.Name = "btnSendMessage";
-            this.btnSendMessage.Size = new System.Drawing.Size(204, 39);
+            this.btnSendMessage.Size = new System.Drawing.Size(233, 38);
             this.btnSendMessage.TabIndex = 3;
             this.btnSendMessage.Text = "Send Message";
             this.btnSendMessage.UseVisualStyleBackColor = true;
+            this.btnSendMessage.Visible = false;
             this.btnSendMessage.Click += new System.EventHandler(this.btnSendMessage_Click);
             // 
             // btnConnectToServer
             // 
-            this.btnConnectToServer.Location = new System.Drawing.Point(397, 65);
+            this.btnConnectToServer.Location = new System.Drawing.Point(675, 59);
             this.btnConnectToServer.Name = "btnConnectToServer";
-            this.btnConnectToServer.Size = new System.Drawing.Size(272, 35);
+            this.btnConnectToServer.Size = new System.Drawing.Size(233, 35);
             this.btnConnectToServer.TabIndex = 4;
             this.btnConnectToServer.Text = "Connect to Server";
             this.btnConnectToServer.UseVisualStyleBackColor = true;
@@ -84,9 +86,9 @@
             // lblSetUserName
             // 
             this.lblSetUserName.AutoSize = true;
-            this.lblSetUserName.Location = new System.Drawing.Point(186, 33);
+            this.lblSetUserName.Location = new System.Drawing.Point(101, 56);
             this.lblSetUserName.Name = "lblSetUserName";
-            this.lblSetUserName.Size = new System.Drawing.Size(118, 20);
+            this.lblSetUserName.Size = new System.Drawing.Size(206, 32);
             this.lblSetUserName.TabIndex = 6;
             this.lblSetUserName.Text = "Set User Name";
             // 
@@ -95,32 +97,32 @@
             this.lblUserNames.AutoSize = true;
             this.lblUserNames.Location = new System.Drawing.Point(687, 36);
             this.lblUserNames.Name = "lblUserNames";
-            this.lblUserNames.Size = new System.Drawing.Size(0, 20);
+            this.lblUserNames.Size = new System.Drawing.Size(0, 32);
             this.lblUserNames.TabIndex = 7;
-            // 
-            // txtUsers
-            // 
-            this.txtUsers.Location = new System.Drawing.Point(684, 65);
-            this.txtUsers.Multiline = true;
-            this.txtUsers.Name = "txtUsers";
-            this.txtUsers.Size = new System.Drawing.Size(261, 607);
-            this.txtUsers.TabIndex = 8;
             // 
             // lblConnectedUsers
             // 
             this.lblConnectedUsers.AutoSize = true;
-            this.lblConnectedUsers.Location = new System.Drawing.Point(752, 33);
+            this.lblConnectedUsers.Location = new System.Drawing.Point(675, 65);
             this.lblConnectedUsers.Name = "lblConnectedUsers";
-            this.lblConnectedUsers.Size = new System.Drawing.Size(133, 20);
+            this.lblConnectedUsers.Size = new System.Drawing.Size(233, 32);
             this.lblConnectedUsers.TabIndex = 9;
             this.lblConnectedUsers.Text = "Connected Users";
             this.lblConnectedUsers.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
+            // txtConnectedUsers
+            // 
+            this.txtConnectedUsers.Location = new System.Drawing.Point(675, 100);
+            this.txtConnectedUsers.Multiline = true;
+            this.txtConnectedUsers.Name = "txtConnectedUsers";
+            this.txtConnectedUsers.Size = new System.Drawing.Size(233, 499);
+            this.txtConnectedUsers.TabIndex = 10;
+            this.txtConnectedUsers.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // frmChatClient
             // 
-            this.ClientSize = new System.Drawing.Size(957, 747);
-            this.Controls.Add(this.lblConnectedUsers);
-            this.Controls.Add(this.txtUsers);
+            this.ClientSize = new System.Drawing.Size(931, 654);
+            this.Controls.Add(this.txtConnectedUsers);
             this.Controls.Add(this.lblUserNames);
             this.Controls.Add(this.lblSetUserName);
             this.Controls.Add(this.btnConnectToServer);
@@ -128,6 +130,7 @@
             this.Controls.Add(this.txtUserName);
             this.Controls.Add(this.txtSendMessage);
             this.Controls.Add(this.txtChatWindow);
+            this.Controls.Add(this.lblConnectedUsers);
             this.Name = "frmChatClient";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -143,8 +146,8 @@
         private System.Windows.Forms.Button btnSendMessage;
         private System.Windows.Forms.Label lblSetUserName;
         private System.Windows.Forms.Label lblUserNames;
-        private System.Windows.Forms.TextBox txtUsers;
         private System.Windows.Forms.Label lblConnectedUsers;
+        private System.Windows.Forms.TextBox txtConnectedUsers;
     }
 }
 

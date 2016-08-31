@@ -16,13 +16,9 @@ namespace ChatClient
     public partial class frmChatClient : Form
     {
         TcpClient MessagesSocket = new TcpClient();
-        TcpClient UsersSocket = new TcpClient();
         NetworkStream MessagesStream = default(NetworkStream);
-        NetworkStream UsersStream = default(NetworkStream);
-        Random random = new Random();
-        string readData = null;
-        string userData = null;
-
+        string returnedMessageData = null;
+        string returnedUserData = null;
         public frmChatClient()
         {
             InitializeComponent();
@@ -30,7 +26,7 @@ namespace ChatClient
 
         private void btnSendMessage_Click(object sender, EventArgs e)
         {
-            byte[] outStream = System.Text.Encoding.ASCII.GetBytes(txtSendMessage.Text + "$");
+            byte[] outStream = Encoding.ASCII.GetBytes(txtSendMessage.Text + "m$m");
             MessagesStream.Write(outStream, 0, outStream.Length);
             MessagesStream.Flush();
             txtSendMessage.Clear();
@@ -43,6 +39,10 @@ namespace ChatClient
 
         private void getMessage()
         {
+            string unEditedDataFromServer = null;
+            string messageData = null;
+            int length;
+            int lengthOfPacketCode = 3;
             while (MessagesSocket.Connected)
             {
                 MessagesStream = MessagesSocket.GetStream();
@@ -50,30 +50,45 @@ namespace ChatClient
                 byte[] inStream = new byte[65536];
                 buffSize = MessagesSocket.ReceiveBufferSize;
                 MessagesStream.Read(inStream, 0, inStream.Length);
-                string returndata = System.Text.Encoding.ASCII.GetString(inStream);
-                readData = "" + returndata;
-                msg();
+                unEditedDataFromServer = Encoding.ASCII.GetString(inStream);
+                messageData = unEditedDataFromServer.Substring(0, unEditedDataFromServer.IndexOf("m$m"));
+                returnedMessageData = "" + messageData;
+
+                if (unEditedDataFromServer.IndexOf("u$u") >= 0)
+                {
+                    length = unEditedDataFromServer.IndexOf("u$u");
+                    length = length - unEditedDataFromServer.IndexOf("m$m");
+                    returnedUserData = unEditedDataFromServer.Substring(unEditedDataFromServer.IndexOf("m$m") + lengthOfPacketCode, length - lengthOfPacketCode);
+                }
+
+                UpdateGUI();
+
             }
         }
 
-        private void msg()
+        private void UpdateGUI()
         {
             if (this.InvokeRequired)
-                this.Invoke(new MethodInvoker(msg));
-            else
-                txtChatWindow.Text = txtChatWindow.Text + Environment.NewLine + " >> " + readData;
+                this.Invoke(new MethodInvoker(UpdateGUI));
+            else if (this.InvokeRequired!=true && returnedUserData == null)
+                txtChatWindow.Text = txtChatWindow.Text + Environment.NewLine + " >> " + returnedMessageData;
+           else 
+            {
+                txtChatWindow.Text = txtChatWindow.Text + Environment.NewLine + " >> " + returnedMessageData;
+                txtConnectedUsers.AppendText(returnedUserData);
+                txtConnectedUsers.Text =  returnedUserData;
+            }
         }
         private void LoopConnect()
         {
             int attempts = 0;
 
-            while (!MessagesSocket.Connected && !UsersSocket.Connected)
+            while (!MessagesSocket.Connected)
             {
                 try
                 {
                     attempts++;
-                    MessagesSocket.Connect("10.2.20.11", 12000);
-                    UsersSocket.Connect("10.2.20.11", 12000);
+                    MessagesSocket.Connect("10.2.20.21", 12000);
                 }
                 catch (SocketException)
                 {
@@ -82,49 +97,19 @@ namespace ChatClient
                 }
             }
             txtChatWindow.Clear();
-            readData = "Conected to Chat Server ...";
-            msg();
-            UsersStream = UsersSocket.GetStream();
+            returnedMessageData = "Conected to Chat Server ...";
+            UpdateGUI();
             MessagesStream = MessagesSocket.GetStream();
             btnConnectToServer.Visible = false;
+            btnSendMessage.Visible = true;
+            txtSendMessage.Visible = true;
 
-            byte[] outStreamMessage = Encoding.ASCII.GetBytes(txtUserName.Text + "$");
-            byte[] outStreamWindow = Encoding.ASCII.GetBytes(random.Next(1, 25000).ToString());
-            UsersStream.Write(outStreamWindow, 0, outStreamWindow.Length);
+            byte[] outStreamMessage = Encoding.ASCII.GetBytes(txtUserName.Text + "m$m");
             MessagesStream.Write(outStreamMessage, 0, outStreamMessage.Length);
-            UsersStream.Flush();
             MessagesStream.Flush();
-
             Thread ctThread = new Thread(getMessage);
-            Thread GTAutoThread = new Thread(GetUserNames);
             ctThread.Start();
-            GTAutoThread.Start();
-               }
-            private void GetUserNames()
-                {
-            while (UsersSocket.Connected)
-            {
-                UsersStream = UsersSocket.GetStream();
-                int buffSize = 0;
-                byte[] inStream = new byte[65536];
-                buffSize = UsersSocket.ReceiveBufferSize;
-                UsersStream.Read(inStream, 0, inStream.Length);
-                userData = Encoding.ASCII.GetString(inStream);
-                setUserNames();
-            }
-
-          }
-        private void setUserNames()
-        {
-            if (this.InvokeRequired)
-                this.Invoke(new MethodInvoker(setUserNames));
-            else
-                lblUserNames.Text = userData;
         }
 
-        private void lstUsersConnected_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
     }
-    }
+}

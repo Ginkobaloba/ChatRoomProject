@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Net;
 using System.Text;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace ConsoleApplication1
 {
@@ -11,7 +12,7 @@ namespace ConsoleApplication1
     {
         public static Hashtable clientsList = new Hashtable();
 
-        static void Main(string[] args)
+        static void Main(string[] args) 
         {
             TcpListener serverSocket = new TcpListener(IPAddress.Any,12000);
             TcpClient clientSocket = default(TcpClient);
@@ -31,59 +32,67 @@ namespace ConsoleApplication1
 
                 NetworkStream networkStream = clientSocket.GetStream();
                 networkStream.Read(bytesFrom, 0, (int)clientSocket.ReceiveBufferSize);
-                dataFromClient = System.Text.Encoding.ASCII.GetString(bytesFrom);
-                dataFromClient = dataFromClient.Substring(0, dataFromClient.IndexOf("$"));
-                dataFromClient = dataFromClient + counter;
-                clientsList.Add(dataFromClient, clientSocket);
-
-                if (int.TryParse(dataFromClient, out result))
-                {
-                    broadcast(dataFromClient + " Joined ", dataFromClient, false);
-                    Console.WriteLine(dataFromClient + " Joined chat room ");
-                }
-                handleClinet client = new handleClinet();
+                dataFromClient = Encoding.ASCII.GetString(bytesFrom);
+                dataFromClient = dataFromClient.Substring(0, dataFromClient.IndexOf("m$m"));
+                clientsList.Add(clientSocket, dataFromClient);
+                Broadcast(dataFromClient + " Joined ", dataFromClient, true);
+                Console.WriteLine(dataFromClient + " Joined chat room ");
+                HandleClient client = new HandleClient();
                 client.startClient(clientSocket, dataFromClient, clientsList);
             }
         }
 
-        public static void broadcast(string msg, string uName, bool flag)
+        public static void Broadcast(string message,  string clientName, bool isHidden, string listUserName = null)
         {
-            foreach (DictionaryEntry Item in clientsList)
+            foreach (DictionaryEntry key in clientsList)
             {
                 TcpClient broadcastSocket;
-                broadcastSocket = (TcpClient)Item.Value;
+                broadcastSocket = (TcpClient)key.Key;
                 NetworkStream broadcastStream = broadcastSocket.GetStream();
                 Byte[] broadcastBytes = null;
+                string broadCastSystem = null;
+                string broadCastUser = null;
 
-                if (flag == true)
+                if (listUserName == null)
                 {
-                    broadcastBytes = Encoding.ASCII.GetBytes(uName + " says : " + msg);
+                    broadCastSystem = message + "m$m";
+                    broadCastUser = clientName + " says : " + message + "m$m";
                 }
                 else
                 {
-                    broadcastBytes = Encoding.ASCII.GetBytes(msg);
+                    broadCastSystem = message + "m$m" + listUserName + "u$u";
+                    broadCastUser = clientName + " says : " + message + "m$m" + listUserName + "u$u";
+                }
+
+                if (isHidden == true)
+                {
+                    broadcastBytes = Encoding.ASCII.GetBytes(broadCastSystem);
+                }
+                else
+                {
+                    broadcastBytes = Encoding.ASCII.GetBytes(broadCastUser);
                 }
 
                 broadcastStream.Write(broadcastBytes, 0, broadcastBytes.Length);
                 broadcastStream.Flush();
             }
-        }  //end broadcast function
-    }//end Main class
+        } 
+    }
 
 
-    public class handleClinet
+    public class HandleClient
     {
         TcpClient clientSocket;
-        string clNo;
+        string clientName;
         Hashtable clientsList;
 
-        public void startClient(TcpClient inClientSocket, string clineNo, Hashtable cList)
+        public void startClient(TcpClient inClientSocket, string clientName, Hashtable clientList)
         {
             this.clientSocket = inClientSocket;
-            this.clNo = clineNo;
-            this.clientsList = cList;
-            Thread ctThread = new Thread(doChat);
-            ctThread.Start();
+            this.clientName = clientName;
+            this.clientsList = clientList;
+            Thread Thread = new Thread(doChat);
+            Thread.Start();
         }
 
         private void doChat()
@@ -91,9 +100,12 @@ namespace ConsoleApplication1
             int requestCount = 0;
             byte[] bytesFrom = new byte[65536];
             string dataFromClient = null;
+            string dataFromClientUnedited = null;
+            string userNamesFromServer = null;
             Byte[] sendBytes = null;
             string serverResponse = null;
             string rCount = null;
+            int length;
             requestCount = 0;
 
             while ((true))
@@ -103,18 +115,45 @@ namespace ConsoleApplication1
                     requestCount = requestCount + 1;
                     NetworkStream networkStream = clientSocket.GetStream();
                     networkStream.Read(bytesFrom, 0, (int)clientSocket.ReceiveBufferSize);
-                    dataFromClient = System.Text.Encoding.ASCII.GetString(bytesFrom);
-                    dataFromClient = dataFromClient.Substring(0, dataFromClient.IndexOf("$"));
-                    Console.WriteLine("From client - " + clNo + " : " + dataFromClient);
+                    dataFromClientUnedited = Encoding.ASCII.GetString(bytesFrom);
+                    dataFromClient = dataFromClientUnedited.Substring(0, dataFromClientUnedited.IndexOf("m$m"));
+                    Console.WriteLine("From client - " + clientName + " : " + dataFromClient);
                     rCount = Convert.ToString(requestCount);
+                    userNamesFromServer = GetConnectedUsers();
+                    Program.Broadcast(dataFromClient, clientName, false, userNamesFromServer);
 
-                    Program.broadcast(dataFromClient, clNo, true);
+
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.ToString());
                 }
-            }//end while
-        }//end doChat
-    } //end class handleClinet
-}//end namespace
+            }
+        }
+        private string GetConnectedUsers()
+        {
+            List<string> users = new List<string>();
+            string listOfUsers = null;
+
+
+            foreach (DictionaryEntry Key in clientsList)
+            {
+                users.Add(Key.Value.ToString());
+            }
+
+            if (users.Count == 1)
+                {
+                listOfUsers = users[0];
+                 }
+            else
+            {
+                for (int i = 0; i < users.Count - 1; i++)
+                {
+                    listOfUsers = listOfUsers + users[i]+ "/r/n";
+                }
+                listOfUsers = listOfUsers + users[users.Count - 1];
+            }
+                return listOfUsers;
+        }
+    }
+}

@@ -10,3 +10,9 @@ C:\Users\Drama\Desktop\devcodecampprojects\ChatRoomProject\ChatServer\ChatServer
 C:\Users\Drama\Desktop\devcodecampprojects\ChatRoomProject\ChatServer\ChatServer\obj\Debug\ChatServer.csprojResolveAssemblyReference.cache
 C:\Users\Drama\Desktop\devcodecampprojects\ChatRoomProject\ChatServer\ChatServer\obj\Debug\ChatServer.exe
 C:\Users\Drama\Desktop\devcodecampprojects\ChatRoomProject\ChatServer\ChatServer\obj\Debug\ChatServer.pdb
+C:\Users\Drama\Desktop\ChatRoomProject\ChatServer\ChatServer\bin\Debug\ChatServer.exe.config
+C:\Users\Drama\Desktop\ChatRoomProject\ChatServer\ChatServer\obj\Debug\ChatServer.exe
+C:\Users\Drama\Desktop\ChatRoomProject\ChatServer\ChatServer\obj\Debug\ChatServer.pdb
+C:\Users\Drama\Desktop\ChatRoomProject\ChatServer\ChatServer\bin\Debug\ChatServer.exe
+C:\Users\Drama\Desktop\ChatRoomProject\ChatServer\ChatServer\bin\Debug\ChatServer.pdb
+C:\Users\Drama\Desktop\ChatRoomProject\ChatServer\ChatServer\obj\Debug\ChatServer.csprojResolveAssemblyReference.cache
