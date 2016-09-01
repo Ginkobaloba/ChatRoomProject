@@ -36,7 +36,7 @@
             this.lblSetUserName = new System.Windows.Forms.Label();
             this.lblUserNames = new System.Windows.Forms.Label();
             this.lblConnectedUsers = new System.Windows.Forms.Label();
-            this.txtConnectedUsers = new System.Windows.Forms.TextBox();
+            this.chkListConnectedUsers = new System.Windows.Forms.CheckedListBox();
             this.SuspendLayout();
             // 
             // txtChatWindow
@@ -44,29 +44,29 @@
             this.txtChatWindow.Location = new System.Drawing.Point(20, 50);
             this.txtChatWindow.Multiline = true;
             this.txtChatWindow.Name = "txtChatWindow";
-            this.txtChatWindow.Size = new System.Drawing.Size(649, 499);
+            this.txtChatWindow.Size = new System.Drawing.Size(649, 487);
             this.txtChatWindow.TabIndex = 2;
             // 
             // txtSendMessage
             // 
-            this.txtSendMessage.Location = new System.Drawing.Point(20, 551);
+            this.txtSendMessage.Location = new System.Drawing.Point(20, 543);
             this.txtSendMessage.Name = "txtSendMessage";
-            this.txtSendMessage.Size = new System.Drawing.Size(649, 38);
+            this.txtSendMessage.Size = new System.Drawing.Size(649, 26);
             this.txtSendMessage.TabIndex = 1;
             this.txtSendMessage.Visible = false;
             // 
             // txtUserName
             // 
-            this.txtUserName.Location = new System.Drawing.Point(313, 12);
+            this.txtUserName.Location = new System.Drawing.Point(313, 18);
             this.txtUserName.Name = "txtUserName";
-            this.txtUserName.Size = new System.Drawing.Size(356, 38);
+            this.txtUserName.Size = new System.Drawing.Size(356, 26);
             this.txtUserName.TabIndex = 0;
             // 
             // btnSendMessage
             // 
-            this.btnSendMessage.Location = new System.Drawing.Point(675, 551);
+            this.btnSendMessage.Location = new System.Drawing.Point(675, 543);
             this.btnSendMessage.Name = "btnSendMessage";
-            this.btnSendMessage.Size = new System.Drawing.Size(233, 19);
+            this.btnSendMessage.Size = new System.Drawing.Size(233, 34);
             this.btnSendMessage.TabIndex = 3;
             this.btnSendMessage.Text = "Send Message";
             this.btnSendMessage.UseVisualStyleBackColor = true;
@@ -75,9 +75,9 @@
             // 
             // btnConnectToServer
             // 
-            this.btnConnectToServer.Location = new System.Drawing.Point(675, 13);
+            this.btnConnectToServer.Location = new System.Drawing.Point(682, 12);
             this.btnConnectToServer.Name = "btnConnectToServer";
-            this.btnConnectToServer.Size = new System.Drawing.Size(233, 29);
+            this.btnConnectToServer.Size = new System.Drawing.Size(233, 35);
             this.btnConnectToServer.TabIndex = 4;
             this.btnConnectToServer.Text = "Connect to Server";
             this.btnConnectToServer.UseVisualStyleBackColor = true;
@@ -86,9 +86,9 @@
             // lblSetUserName
             // 
             this.lblSetUserName.AutoSize = true;
-            this.lblSetUserName.Location = new System.Drawing.Point(101, 15);
+            this.lblSetUserName.Location = new System.Drawing.Point(189, 22);
             this.lblSetUserName.Name = "lblSetUserName";
-            this.lblSetUserName.Size = new System.Drawing.Size(206, 32);
+            this.lblSetUserName.Size = new System.Drawing.Size(118, 20);
             this.lblSetUserName.TabIndex = 6;
             this.lblSetUserName.Text = "Set User Name";
             // 
@@ -97,7 +97,7 @@
             this.lblUserNames.AutoSize = true;
             this.lblUserNames.Location = new System.Drawing.Point(687, 36);
             this.lblUserNames.Name = "lblUserNames";
-            this.lblUserNames.Size = new System.Drawing.Size(0, 32);
+            this.lblUserNames.Size = new System.Drawing.Size(0, 20);
             this.lblUserNames.TabIndex = 7;
             // 
             // lblConnectedUsers
@@ -109,19 +109,21 @@
             this.lblConnectedUsers.Text = "Connected Users";
             this.lblConnectedUsers.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // txtConnectedUsers
+            // chkListConnectedUsers
             // 
-            this.txtConnectedUsers.Location = new System.Drawing.Point(675, 50);
-            this.txtConnectedUsers.Multiline = true;
-            this.txtConnectedUsers.Name = "txtConnectedUsers";
-            this.txtConnectedUsers.Size = new System.Drawing.Size(233, 499);
-            this.txtConnectedUsers.TabIndex = 10;
-            this.txtConnectedUsers.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.chkListConnectedUsers.FormattingEnabled = true;
+            this.chkListConnectedUsers.Location = new System.Drawing.Point(679, 50);
+            this.chkListConnectedUsers.Name = "chkListConnectedUsers";
+            this.chkListConnectedUsers.Size = new System.Drawing.Size(236, 487);
+            this.chkListConnectedUsers.TabIndex = 11;
+            this.chkListConnectedUsers.ThreeDCheckBoxes = true;
+            
+            this.chkListConnectedUsers.SelectedIndexChanged += new System.EventHandler(this.chkListConnectedUsers_SelectedIndexChanged);
             // 
             // frmChatClient
             // 
-            this.ClientSize = new System.Drawing.Size(921, 598);
-            this.Controls.Add(this.txtConnectedUsers);
+            this.ClientSize = new System.Drawing.Size(920, 598);
+            this.Controls.Add(this.chkListConnectedUsers);
             this.Controls.Add(this.lblUserNames);
             this.Controls.Add(this.lblSetUserName);
             this.Controls.Add(this.btnConnectToServer);
@@ -146,7 +148,7 @@
         private System.Windows.Forms.Label lblSetUserName;
         private System.Windows.Forms.Label lblUserNames;
         private System.Windows.Forms.Label lblConnectedUsers;
-        private System.Windows.Forms.TextBox txtConnectedUsers;
+        private System.Windows.Forms.CheckedListBox chkListConnectedUsers;
     }
 }
 

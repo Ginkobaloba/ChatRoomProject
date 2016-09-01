@@ -16,3 +16,12 @@ C:\Users\Drama\Desktop\ChatRoomProject\ChatClient\WindowsFormsApplication1\obj\D
 C:\Users\Drama\Desktop\ChatRoomProject\ChatClient\WindowsFormsApplication1\obj\Debug\ChatClient.frmChatClient.resources
 C:\Users\Drama\Desktop\ChatRoomProject\ChatClient\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources
 C:\Users\Drama\Desktop\ChatRoomProject\ChatClient\WindowsFormsApplication1\obj\Debug\ChatClient.csproj.GenerateResource.Cache
+C:\Users\Drama\Desktop\ChatClient\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe.config
+C:\Users\Drama\Desktop\ChatClient\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
+C:\Users\Drama\Desktop\ChatClient\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
+C:\Users\Drama\Desktop\ChatClient\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe
+C:\Users\Drama\Desktop\ChatClient\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.pdb
+C:\Users\Drama\Desktop\ChatClient\WindowsFormsApplication1\obj\Debug\ChatClient.csprojResolveAssemblyReference.cache
+C:\Users\Drama\Desktop\ChatClient\WindowsFormsApplication1\obj\Debug\ChatClient.frmChatClient.resources
+C:\Users\Drama\Desktop\ChatClient\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources
+C:\Users\Drama\Desktop\ChatClient\WindowsFormsApplication1\obj\Debug\ChatClient.csproj.GenerateResource.Cache

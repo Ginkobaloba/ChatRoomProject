@@ -19,6 +19,11 @@ namespace ChatClient
         NetworkStream MessagesStream = default(NetworkStream);
         string returnedMessageData = null;
         string returnedUserData = null;
+        string oneUsersData = null;
+        string broadCastList = null;
+        int length;
+        int lengthOfPacketCode = 3;
+
         public frmChatClient()
         {
             InitializeComponent();
@@ -26,7 +31,9 @@ namespace ChatClient
 
         private void btnSendMessage_Click(object sender, EventArgs e)
         {
-            byte[] outStream = Encoding.ASCII.GetBytes(txtSendMessage.Text + "m$m");
+            string broadCastList;
+            broadCastList = GetBroadcastList();
+            byte[] outStream = Encoding.ASCII.GetBytes(txtSendMessage.Text + "m$m" + broadCastList + "b$c");
             MessagesStream.Write(outStream, 0, outStream.Length);
             MessagesStream.Flush();
             txtSendMessage.Clear();
@@ -42,7 +49,7 @@ namespace ChatClient
             string unEditedDataFromServer = null;
             string messageData = null;
             int length;
-            int lengthOfPacketCode = 3;
+            int i;
             while (MessagesSocket.Connected)
             {
                 MessagesStream = MessagesSocket.GetStream();
@@ -58,6 +65,7 @@ namespace ChatClient
                 {
                     length = unEditedDataFromServer.IndexOf("u$u");
                     length = length - unEditedDataFromServer.IndexOf("m$m");
+
                     returnedUserData = unEditedDataFromServer.Substring(unEditedDataFromServer.IndexOf("m$m") + lengthOfPacketCode, length - lengthOfPacketCode);
                 }
 
@@ -70,13 +78,12 @@ namespace ChatClient
         {
             if (this.InvokeRequired)
                 this.Invoke(new MethodInvoker(UpdateGUI));
-            else if (this.InvokeRequired!=true && returnedUserData == null)
+            else if (this.InvokeRequired != true && returnedUserData == null)
                 txtChatWindow.Text = txtChatWindow.Text + Environment.NewLine + " >> " + returnedMessageData;
-           else 
+            else
             {
                 txtChatWindow.Text = txtChatWindow.Text + Environment.NewLine + " >> " + returnedMessageData;
-                txtConnectedUsers.AppendText(returnedUserData);
-                txtConnectedUsers.Text =  returnedUserData;
+                UpdateUserList();
             }
         }
         private void LoopConnect()
@@ -88,7 +95,7 @@ namespace ChatClient
                 try
                 {
                     attempts++;
-                    MessagesSocket.Connect("192.168.1.23", 12000);
+                    MessagesSocket.Connect("10.2.20.20", 12000);
                 }
                 catch (SocketException)
                 {
@@ -113,6 +120,48 @@ namespace ChatClient
             Thread ctThread = new Thread(getMessage);
             ctThread.Start();
         }
+        private void UpdateUserList()
+        {
+            while (chkListConnectedUsers.Items.Count != 0)
+            {
+                chkListConnectedUsers.Items.RemoveAt(0);
+            }
 
+
+            while (returnedUserData.IndexOf("/u/") > 0)
+            {
+                length = returnedUserData.Length;
+                length = length - returnedUserData.IndexOf("/u/");
+                oneUsersData = returnedUserData.Substring(0, returnedUserData.IndexOf("/u/"));
+                chkListConnectedUsers.Items.Add(oneUsersData);
+                returnedUserData = returnedUserData.Substring(returnedUserData.IndexOf("/u/") + lengthOfPacketCode, (returnedUserData.Length - (returnedUserData.IndexOf("/u/") + lengthOfPacketCode)));
+
+            }
+
+            for (int i = 0; i < chkListConnectedUsers.Items.Count; i++)
+            {
+
+                chkListConnectedUsers.SetItemChecked(i, true);
+            }
+
+
+        }
+        public string GetBroadcastList()
+        {
+
+
+            foreach (string item in chkListConnectedUsers.CheckedItems)
+                {
+                broadCastList = broadCastList + item + "/bc/";
+                }
+
+                   return broadCastList;
+        }
+
+        private void chkListConnectedUsers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
-}
+   }
+
