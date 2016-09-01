@@ -38,35 +38,64 @@ namespace ChatServer
             }
         }
 
-        public static void Broadcast(string message,  string clientName, bool isHidden)
+        public static void Broadcast(string message, string clientName, bool isHidden, List<string> broadCastList = null)
         {
-            foreach (DictionaryEntry key in clientsList)
+            TcpClient broadcastSocket;
+            NetworkStream broadcastStream;
+            Byte[] broadcastBytes = null;
+            string broadCastSystem = null;
+            string broadCastUser = null;
+            string listOfUsers = null;
+            listOfUsers = GetConnectedUsers();
+            if (broadCastList == null)
             {
-                TcpClient broadcastSocket;
-                broadcastSocket = (TcpClient)key.Key;
-                NetworkStream broadcastStream = broadcastSocket.GetStream();
-                Byte[] broadcastBytes = null;
-                string broadCastSystem = null;
-                string broadCastUser = null;
-                string listOfUsers = null;
-
-                listOfUsers = GetConnectedUsers();
-
-                    broadCastSystem = message + "m$m" + listOfUsers + "u$u";
-                    broadCastUser = clientName + " says : " + message + "m$m" + listOfUsers + "u$u";
-
-                if (isHidden == true)
+                foreach (DictionaryEntry client in clientsList)
                 {
-                    broadcastBytes = Encoding.ASCII.GetBytes(broadCastSystem);
-                }
-                else
-                {
-                    broadcastBytes = Encoding.ASCII.GetBytes(broadCastUser);
-                }
+                    broadcastSocket = (TcpClient)client.Key;
+                    broadcastStream = broadcastSocket.GetStream();
+                    if (isHidden == true)
+                    {
+                        broadCastSystem = message + "m$m" + listOfUsers + "u$u";
+                        broadcastBytes = Encoding.ASCII.GetBytes(broadCastSystem);
+                    }
+                    else
+                    {
+                        broadCastUser = clientName + " says : " + message + "m$m" + listOfUsers + "u$u";
+                        broadcastBytes = Encoding.ASCII.GetBytes(broadCastUser);S
 
-                broadcastStream.Write(broadcastBytes, 0, broadcastBytes.Length);
-                broadcastStream.Flush();
+                    broadcastStream.Write(broadcastBytes, 0, broadcastBytes.Length);
+                    broadcastStream.Flush();
+                }
             }
+            else
+            {
+                foreach (DictionaryEntry client in clientsList)
+                {
+                    for (int i = 0; i < broadCastList.Count; i++)
+
+                        if (client.Value.ToString().ToUpper() == broadCastList[i])
+                        {
+                            broadcastSocket = (TcpClient)client.Key;
+                            broadcastStream = broadcastSocket.GetStream();
+
+                            if (isHidden == true)
+                            {
+                                broadCastSystem = message + "m$m" + listOfUsers + "u$u";
+                                broadcastBytes = Encoding.ASCII.GetBytes(broadCastSystem);
+                            }
+                            else
+                            {
+                                broadCastUser = clientName + " says : " + message + "m$m" + listOfUsers + "u$u";
+                                broadcastBytes = Encoding.ASCII.GetBytes(broadCastUser);
+                            }
+
+                            broadcastStream.Write(broadcastBytes, 0, broadcastBytes.Length);
+                            broadcastStream.Flush();
+
+                        }
+                }
+            }
+
         }
         public static string GetConnectedUsers()
         {

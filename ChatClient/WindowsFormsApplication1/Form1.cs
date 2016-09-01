@@ -32,11 +32,11 @@ namespace ChatClient
         private void btnSendMessage_Click(object sender, EventArgs e)
         {
             string broadCastList;
-            broadCastList = GetBroadcastList();
+            broadCastList = GetBroadcastList();           
             byte[] outStream = Encoding.ASCII.GetBytes(txtSendMessage.Text + "m$m" + broadCastList + "b$c");
             MessagesStream.Write(outStream, 0, outStream.Length);
             MessagesStream.Flush();
-            txtSendMessage.Clear();
+            txtSendMessage.Clear();S
         }
 
         private void btnConnectToServer_Click(object sender, EventArgs e)
@@ -50,7 +50,7 @@ namespace ChatClient
             string messageData = null;
             int length;
             int i;
-            while (MessagesSocket.Connected)
+            while (true)
             {
                 MessagesStream = MessagesSocket.GetStream();
                 int buffSize = 0;
@@ -58,9 +58,15 @@ namespace ChatClient
                 buffSize = MessagesSocket.ReceiveBufferSize;
                 MessagesStream.Read(inStream, 0, inStream.Length);
                 unEditedDataFromServer = Encoding.ASCII.GetString(inStream);
-                messageData = unEditedDataFromServer.Substring(0, unEditedDataFromServer.IndexOf("m$m"));
-                returnedMessageData = "" + messageData;
-
+                if (unEditedDataFromServer.IndexOf("m$m") < 0)
+                {
+                    returnedMessageData = unEditedDataFromServer;
+                }
+                else
+                {
+                    messageData = unEditedDataFromServer.Substring(0, unEditedDataFromServer.IndexOf("m$m"));
+                    returnedMessageData = "" + messageData;
+                }
                 if (unEditedDataFromServer.IndexOf("u$u") >= 0)
                 {
                     length = unEditedDataFromServer.IndexOf("u$u");
@@ -152,7 +158,7 @@ namespace ChatClient
 
             foreach (string item in chkListConnectedUsers.CheckedItems)
                 {
-                broadCastList = broadCastList + item + "/bc/";
+                broadCastList = broadCastList + item + "b/c";
                 }
 
                    return broadCastList;

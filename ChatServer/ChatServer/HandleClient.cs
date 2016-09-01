@@ -25,29 +25,26 @@ namespace ChatServer
 
         private void doChat()
         {
-            int requestCount = 0;
             byte[] bytesFrom = new byte[65536];
-            string dataFromClient = null;
+            string broadCastDataFromClient = null;
+            string messageDataFromClient = null;
             string dataFromClientUnedited = null;
-            string userNamesFromServer = null;
-            Byte[] sendBytes = null;
-            string serverResponse = null;
-            string rCount = null;
-            int length;
-            requestCount = 0;
+            List<string> broadCastList;
 
             while ((true))
             {
                 try
                 {
-                    requestCount = requestCount + 1;
                     NetworkStream networkStream = clientSocket.GetStream();
                     networkStream.Read(bytesFrom, 0, (int)clientSocket.ReceiveBufferSize);
                     dataFromClientUnedited = Encoding.ASCII.GetString(bytesFrom);
-                    dataFromClient = dataFromClientUnedited.Substring(0, dataFromClientUnedited.IndexOf("m$m"));
-                    Console.WriteLine("From client - " + clientName + " : " + dataFromClient);
-                    rCount = Convert.ToString(requestCount);
-                    Program.Broadcast(dataFromClient, clientName, false);
+                    messageDataFromClient = dataFromClientUnedited.Substring(0, dataFromClientUnedited.IndexOf("m$m"));
+                    Console.WriteLine("From client - " + clientName + " : " + messageDataFromClient);
+
+                    broadCastDataFromClient = dataFromClientUnedited.Substring(dataFromClientUnedited.IndexOf("m$m") + 3, dataFromClientUnedited.IndexOf("b$c")-dataFromClientUnedited.IndexOf("m$m")-3);
+
+                    broadCastList = CreateBroadCastList(broadCastDataFromClient);
+                    Program.Broadcast(messageDataFromClient, clientName, false, broadCastList);
 
 
                 }
@@ -56,6 +53,25 @@ namespace ChatServer
                     Console.WriteLine(ex.ToString());
                 }
             }
+
+        }
+        private List<string> CreateBroadCastList(string broadCastData)
+        {
+            string oneUsersData = null;
+            int length;
+            List<string> broadCastList = new List<string>();
+
+            while (broadCastData.IndexOf("b/c") > 0)
+            {
+                length = broadCastData.Length;
+                length = length - broadCastData.IndexOf("b/c");
+                oneUsersData = broadCastData.Substring(0, broadCastData.IndexOf("b/c"));
+                oneUsersData = oneUsersData.ToUpper();
+                broadCastList.Add(oneUsersData);
+                broadCastData = broadCastData.Substring(broadCastData.IndexOf("b/c") + 3, (broadCastData.Length - (broadCastData.IndexOf("b/c") + 3)));
+
+            }
+            return broadCastList;
         }
     }
 }
