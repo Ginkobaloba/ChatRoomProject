@@ -88,7 +88,7 @@ namespace ChatClient
                 try
                 {
                     attempts++;
-                    MessagesSocket.Connect("10.2.20.21", 12000);
+                    MessagesSocket.Connect("192.168.1.23", 12000);
                 }
                 catch (SocketException)
                 {
@@ -101,6 +101,9 @@ namespace ChatClient
             UpdateGUI();
             MessagesStream = MessagesSocket.GetStream();
             btnConnectToServer.Visible = false;
+            txtUserName.Visible = false;
+            lblSetUserName.Visible = false;
+            lblConnectedUsers.Visible = true;
             btnSendMessage.Visible = true;
             txtSendMessage.Visible = true;
 

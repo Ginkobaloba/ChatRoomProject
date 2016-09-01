@@ -41,7 +41,7 @@
             // 
             // txtChatWindow
             // 
-            this.txtChatWindow.Location = new System.Drawing.Point(20, 103);
+            this.txtChatWindow.Location = new System.Drawing.Point(20, 50);
             this.txtChatWindow.Multiline = true;
             this.txtChatWindow.Name = "txtChatWindow";
             this.txtChatWindow.Size = new System.Drawing.Size(649, 499);
@@ -49,7 +49,7 @@
             // 
             // txtSendMessage
             // 
-            this.txtSendMessage.Location = new System.Drawing.Point(20, 606);
+            this.txtSendMessage.Location = new System.Drawing.Point(20, 551);
             this.txtSendMessage.Name = "txtSendMessage";
             this.txtSendMessage.Size = new System.Drawing.Size(649, 38);
             this.txtSendMessage.TabIndex = 1;
@@ -57,16 +57,16 @@
             // 
             // txtUserName
             // 
-            this.txtUserName.Location = new System.Drawing.Point(313, 56);
+            this.txtUserName.Location = new System.Drawing.Point(313, 12);
             this.txtUserName.Name = "txtUserName";
             this.txtUserName.Size = new System.Drawing.Size(356, 38);
             this.txtUserName.TabIndex = 0;
             // 
             // btnSendMessage
             // 
-            this.btnSendMessage.Location = new System.Drawing.Point(675, 608);
+            this.btnSendMessage.Location = new System.Drawing.Point(675, 551);
             this.btnSendMessage.Name = "btnSendMessage";
-            this.btnSendMessage.Size = new System.Drawing.Size(233, 38);
+            this.btnSendMessage.Size = new System.Drawing.Size(233, 19);
             this.btnSendMessage.TabIndex = 3;
             this.btnSendMessage.Text = "Send Message";
             this.btnSendMessage.UseVisualStyleBackColor = true;
@@ -75,9 +75,9 @@
             // 
             // btnConnectToServer
             // 
-            this.btnConnectToServer.Location = new System.Drawing.Point(675, 59);
+            this.btnConnectToServer.Location = new System.Drawing.Point(675, 13);
             this.btnConnectToServer.Name = "btnConnectToServer";
-            this.btnConnectToServer.Size = new System.Drawing.Size(233, 35);
+            this.btnConnectToServer.Size = new System.Drawing.Size(233, 29);
             this.btnConnectToServer.TabIndex = 4;
             this.btnConnectToServer.Text = "Connect to Server";
             this.btnConnectToServer.UseVisualStyleBackColor = true;
@@ -86,7 +86,7 @@
             // lblSetUserName
             // 
             this.lblSetUserName.AutoSize = true;
-            this.lblSetUserName.Location = new System.Drawing.Point(101, 56);
+            this.lblSetUserName.Location = new System.Drawing.Point(101, 15);
             this.lblSetUserName.Name = "lblSetUserName";
             this.lblSetUserName.Size = new System.Drawing.Size(206, 32);
             this.lblSetUserName.TabIndex = 6;
@@ -102,8 +102,7 @@
             // 
             // lblConnectedUsers
             // 
-            this.lblConnectedUsers.AutoSize = true;
-            this.lblConnectedUsers.Location = new System.Drawing.Point(675, 65);
+            this.lblConnectedUsers.Location = new System.Drawing.Point(675, 12);
             this.lblConnectedUsers.Name = "lblConnectedUsers";
             this.lblConnectedUsers.Size = new System.Drawing.Size(233, 32);
             this.lblConnectedUsers.TabIndex = 9;
@@ -112,7 +111,7 @@
             // 
             // txtConnectedUsers
             // 
-            this.txtConnectedUsers.Location = new System.Drawing.Point(675, 100);
+            this.txtConnectedUsers.Location = new System.Drawing.Point(675, 50);
             this.txtConnectedUsers.Multiline = true;
             this.txtConnectedUsers.Name = "txtConnectedUsers";
             this.txtConnectedUsers.Size = new System.Drawing.Size(233, 499);
@@ -121,7 +120,7 @@
             // 
             // frmChatClient
             // 
-            this.ClientSize = new System.Drawing.Size(931, 654);
+            this.ClientSize = new System.Drawing.Size(921, 598);
             this.Controls.Add(this.txtConnectedUsers);
             this.Controls.Add(this.lblUserNames);
             this.Controls.Add(this.lblSetUserName);
