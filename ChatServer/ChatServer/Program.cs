@@ -57,14 +57,16 @@ namespace ChatServer
                     {
                         broadCastSystem = message + "m$m" + listOfUsers + "u$u";
                         broadcastBytes = Encoding.ASCII.GetBytes(broadCastSystem);
+                        broadcastStream.Write(broadcastBytes, 0, broadcastBytes.Length);
+                        broadcastStream.Flush();
                     }
                     else
                     {
                         broadCastUser = clientName + " says : " + message + "m$m" + listOfUsers + "u$u";
-                        broadcastBytes = Encoding.ASCII.GetBytes(broadCastUser);S
-
-                    broadcastStream.Write(broadcastBytes, 0, broadcastBytes.Length);
-                    broadcastStream.Flush();
+                        broadcastBytes = Encoding.ASCII.GetBytes(broadCastUser);
+                        broadcastStream.Write(broadcastBytes, 0, broadcastBytes.Length);
+                        broadcastStream.Flush();
+                    }
                 }
             }
             else
@@ -82,21 +84,23 @@ namespace ChatServer
                             {
                                 broadCastSystem = message + "m$m" + listOfUsers + "u$u";
                                 broadcastBytes = Encoding.ASCII.GetBytes(broadCastSystem);
+                                broadcastStream.Write(broadcastBytes, 0, broadcastBytes.Length);
+                                broadcastStream.Flush();
                             }
                             else
                             {
                                 broadCastUser = clientName + " says : " + message + "m$m" + listOfUsers + "u$u";
                                 broadcastBytes = Encoding.ASCII.GetBytes(broadCastUser);
+                                broadcastStream.Write(broadcastBytes, 0, broadcastBytes.Length);
+                                broadcastStream.Flush();
+
                             }
-
-                            broadcastStream.Write(broadcastBytes, 0, broadcastBytes.Length);
-                            broadcastStream.Flush();
-
                         }
                 }
             }
 
         }
+
         public static string GetConnectedUsers()
         {
             List<string> users = new List<string>();

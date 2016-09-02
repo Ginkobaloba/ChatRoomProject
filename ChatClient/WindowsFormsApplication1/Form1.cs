@@ -36,7 +36,7 @@ namespace ChatClient
             byte[] outStream = Encoding.ASCII.GetBytes(txtSendMessage.Text + "m$m" + broadCastList + "b$c");
             MessagesStream.Write(outStream, 0, outStream.Length);
             MessagesStream.Flush();
-            txtSendMessage.Clear();S
+            txtSendMessage.Clear();
         }
 
         private void btnConnectToServer_Click(object sender, EventArgs e)
@@ -50,14 +50,17 @@ namespace ChatClient
             string messageData = null;
             int length;
             int i;
-            while (true)
+            while (MessagesSocket.Connected)
             {
                 MessagesStream = MessagesSocket.GetStream();
                 int buffSize = 0;
                 byte[] inStream = new byte[65536];
                 buffSize = MessagesSocket.ReceiveBufferSize;
                 MessagesStream.Read(inStream, 0, inStream.Length);
+
+
                 unEditedDataFromServer = Encoding.ASCII.GetString(inStream);
+
                 if (unEditedDataFromServer.IndexOf("m$m") < 0)
                 {
                     returnedMessageData = unEditedDataFromServer;
@@ -101,7 +104,7 @@ namespace ChatClient
                 try
                 {
                     attempts++;
-                    MessagesSocket.Connect("10.2.20.20", 12000);
+                    MessagesSocket.Connect("192.168.1.23", 12000);
                 }
                 catch (SocketException)
                 {
