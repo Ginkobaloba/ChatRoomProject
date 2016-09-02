@@ -38,9 +38,9 @@ namespace ChatServer
 
         public static void Broadcast(string message, string clientName, bool isHidden, List<string> broadCastList = null)
         {
-            TcpClient broadcastSocket;
-            NetworkStream broadcastStream;
-            Queue Messages = new Queue();
+            TcpClient broadcastSocket = null; ;
+            NetworkStream broadcastStream = null;
+            Queue<string> Messages = new Queue<string>();
             Byte[] broadcastBytes = null;
             string broadCastMessage = null;
             string listOfUsers = null;
@@ -55,18 +55,16 @@ namespace ChatServer
                     broadcastStream = broadcastSocket.GetStream();
                     if (isHidden == true)
                     {
-                        broadCastMessage = message + "m$m" + listOfUsers + "u$u";
-                        broadcastBytes = Encoding.ASCII.GetBytes(broadCastMessage);
-                        broadcastStream.Write(broadcastBytes, 0, broadcastBytes.Length);
-                        broadcastStream.Flush();
+                        Messages.Enqueue(message + "m$m" + listOfUsers + "u$u");
                     }
                     else
                     {
-                        broadCastMessage = clientName + " says : " + message + "m$m" + listOfUsers + "u$u";
-                        broadcastBytes = Encoding.ASCII.GetBytes(broadCastMessage);
-                        broadcastStream.Write(broadcastBytes, 0, broadcastBytes.Length);
-                        broadcastStream.Flush();
+                        Messages.Enqueue(clientName + " says : " + message + "m$m" + listOfUsers + "u$u");
                     }
+                    broadCastMessage = Messages.Dequeue();
+                    broadcastBytes = Encoding.ASCII.GetBytes(broadCastMessage);
+                    broadcastStream.Write(broadcastBytes, 0, broadcastBytes.Length);
+                    broadcastStream.Flush();
                 }
             }
             else
@@ -82,25 +80,21 @@ namespace ChatServer
 
                             if (isHidden == true)
                             {
-                                broadCastMessage = message + "m$m" + listOfUsers + "u$u";
-                                broadcastBytes = Encoding.ASCII.GetBytes(broadCastMessage);
-                                broadcastStream.Write(broadcastBytes, 0, broadcastBytes.Length);
-                                broadcastStream.Flush();
+                                Messages.Enqueue(message + "m$m" + listOfUsers + "u$u");
+
                             }
                             else
                             {
-                                broadCastMessage = clientName + " says : " + message + "m$m" + listOfUsers + "u$u";
-                                broadcastBytes = Encoding.ASCII.GetBytes(broadCastMessage);
-                                broadcastStream.Write(broadcastBytes, 0, broadcastBytes.Length);
-                                broadcastStream.Flush();
+                                Messages.Enqueue(clientName + " says : " + message + "m$m" + listOfUsers + "u$u");
                             }
+                            broadCastMessage = Messages.Dequeue();
+                            broadcastBytes = Encoding.ASCII.GetBytes(broadCastMessage);
+                            broadcastStream.Write(broadcastBytes, 0, broadcastBytes.Length);
+                            broadcastStream.Flush();
                         }
                 }
             }
         }
-
-
-
         public static string GetConnectedUsers()
         {
             List<string> users = new List<string>();
@@ -127,9 +121,8 @@ namespace ChatServer
             return listOfUsers;
         }
 
-        private void SendMessageQueue()
-        {
-
+        private void SendMessageQueue(NetworkStream broadcastStream, TcpClient broadcastSocket, Byte[] broadcastBytes)
+        { 
 
         }
     }

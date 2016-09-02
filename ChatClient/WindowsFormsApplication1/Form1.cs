@@ -67,9 +67,10 @@ namespace ChatClient
                 UpdateGUI();
             }
         }
-
+        
         private void UpdateGUI()
         {
+            object key = new object();
             if (this.InvokeRequired)
                 this.Invoke(new MethodInvoker(UpdateGUI));
             else if (this.InvokeRequired != true && returnedUserData == null)
@@ -77,7 +78,10 @@ namespace ChatClient
             else
             {
                 txtChatWindow.Text = txtChatWindow.Text + Environment.NewLine + " >> " + returnedMessageData;
-                UpdateUserList();
+                lock (key)
+                {
+                    UpdateUserList();
+                }
             }
         }
 
@@ -117,41 +121,45 @@ namespace ChatClient
 
         private void UpdateUserList()
         {
-            List<string> connectedUsers = new List<string>();
-            bool inList = false;
 
-            while (returnedUserData.IndexOf("/u/") > 0)
-            {
-                length = returnedUserData.Length;
-                length = length - returnedUserData.IndexOf("/u/");
-                oneUsersData = returnedUserData.Substring(0, returnedUserData.IndexOf("/u/"));
-                connectedUsers.Add(oneUsersData);
-                returnedUserData = returnedUserData.Substring(returnedUserData.IndexOf("/u/") + lengthOfPacketCode, (returnedUserData.Length - (returnedUserData.IndexOf("/u/") + lengthOfPacketCode)));
-            }
+                List<string> connectedUsers = new List<string>();
+                bool inList = false;
 
-            for (int i = 0; i < connectedUsers.Count; i++)
-            {
-                foreach (string item in chkListConnectedUsers.Items)
+                while (returnedUserData.IndexOf("/u/") > 0)
                 {
-                    if (connectedUsers[i] == item)
+                    length = returnedUserData.Length;
+                    length = length - returnedUserData.IndexOf("/u/");
+                    oneUsersData = returnedUserData.Substring(0, returnedUserData.IndexOf("/u/"));
+                    connectedUsers.Add(oneUsersData);
+                    returnedUserData = returnedUserData.Substring(returnedUserData.IndexOf("/u/") + lengthOfPacketCode, (returnedUserData.Length - (returnedUserData.IndexOf("/u/") + lengthOfPacketCode)));
+                }
+
+                for (int i = 0; i < connectedUsers.Count; i++)
+                {
+                    foreach (string item in chkListConnectedUsers.Items)
                     {
-                        inList = true;
+                        if (connectedUsers[i] == item)
+                        {
+                            inList = true;
+                        }
+                    }
+
+                    if (inList == false)
+                    {
+                        chkListConnectedUsers.Items.Add(connectedUsers[i]);
+                        inList = false;
+                        for (int a = 0; a < chkListConnectedUsers.Items.Count; a++)
+                            if (chkListConnectedUsers.Items[a].Equals(connectedUsers[i]))
+                            {
+                                chkListConnectedUsers.SetItemChecked(a, true);
+                            }
                     }
                 }
-                if (inList == false)
-                {
-                    chkListConnectedUsers.Items.Add(connectedUsers[i]);
-                    inList = false;
-                    for (int a= 0; a < chkListConnectedUsers.Items.Count; a++)
-                        if (chkListConnectedUsers.Items[a].Equals(connectedUsers[i]))
-                        {
-                            chkListConnectedUsers.SetItemChecked(a, true);
-                        }
-                }
-            }
+            
         }
         public string GetBroadcastList()
         {
+            broadCastList = "";
             foreach (string item in chkListConnectedUsers.CheckedItems)
             {
                 broadCastList = broadCastList + item + "b/c";
