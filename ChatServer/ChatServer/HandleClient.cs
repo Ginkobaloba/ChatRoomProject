@@ -31,7 +31,7 @@ namespace ChatServer
             string dataFromClientUnedited = null;
             List<string> broadCastList;
 
-            while ((true))
+            while (true)
             {
                 try
                 {
@@ -40,20 +40,15 @@ namespace ChatServer
                     dataFromClientUnedited = Encoding.ASCII.GetString(bytesFrom);
                     messageDataFromClient = dataFromClientUnedited.Substring(0, dataFromClientUnedited.IndexOf("m$m"));
                     Console.WriteLine("From client - " + clientName + " : " + messageDataFromClient);
-
                     broadCastDataFromClient = dataFromClientUnedited.Substring(dataFromClientUnedited.IndexOf("m$m") + 3, dataFromClientUnedited.IndexOf("b$c")-dataFromClientUnedited.IndexOf("m$m")-3);
-
                     broadCastList = CreateBroadCastList(broadCastDataFromClient);
                     Program.Broadcast(messageDataFromClient, clientName, false, broadCastList);
-
-
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.ToString());
                 }
             }
-
         }
         private List<string> CreateBroadCastList(string broadCastData)
         {

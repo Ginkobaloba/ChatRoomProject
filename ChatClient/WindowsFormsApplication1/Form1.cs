@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net.Sockets;
 using System.Threading;
-using System.Net;
+using System.Collections.Generic;
 
 namespace ChatClient
 {
@@ -32,13 +26,12 @@ namespace ChatClient
         private void btnSendMessage_Click(object sender, EventArgs e)
         {
             string broadCastList;
-            broadCastList = GetBroadcastList();           
+            broadCastList = GetBroadcastList();
             byte[] outStream = Encoding.ASCII.GetBytes(txtSendMessage.Text + "m$m" + broadCastList + "b$c");
             MessagesStream.Write(outStream, 0, outStream.Length);
             MessagesStream.Flush();
             txtSendMessage.Clear();
         }
-
         private void btnConnectToServer_Click(object sender, EventArgs e)
         {
             LoopConnect();
@@ -49,16 +42,11 @@ namespace ChatClient
             string unEditedDataFromServer = null;
             string messageData = null;
             int length;
-            int i;
             while (MessagesSocket.Connected)
             {
                 MessagesStream = MessagesSocket.GetStream();
-                int buffSize = 0;
                 byte[] inStream = new byte[65536];
-                buffSize = MessagesSocket.ReceiveBufferSize;
                 MessagesStream.Read(inStream, 0, inStream.Length);
-
-
                 unEditedDataFromServer = Encoding.ASCII.GetString(inStream);
 
                 if (unEditedDataFromServer.IndexOf("m$m") < 0)
@@ -74,12 +62,9 @@ namespace ChatClient
                 {
                     length = unEditedDataFromServer.IndexOf("u$u");
                     length = length - unEditedDataFromServer.IndexOf("m$m");
-
                     returnedUserData = unEditedDataFromServer.Substring(unEditedDataFromServer.IndexOf("m$m") + lengthOfPacketCode, length - lengthOfPacketCode);
                 }
-
                 UpdateGUI();
-
             }
         }
 
@@ -95,6 +80,7 @@ namespace ChatClient
                 UpdateUserList();
             }
         }
+
         private void LoopConnect()
         {
             int attempts = 0;
@@ -104,7 +90,7 @@ namespace ChatClient
                 try
                 {
                     attempts++;
-                    MessagesSocket.Connect("192.168.1.23", 12000);
+                    MessagesSocket.Connect("10.2.20.25", 12000);
                 }
                 catch (SocketException)
                 {
@@ -122,55 +108,56 @@ namespace ChatClient
             lblConnectedUsers.Visible = true;
             btnSendMessage.Visible = true;
             txtSendMessage.Visible = true;
-
             byte[] outStreamMessage = Encoding.ASCII.GetBytes(txtUserName.Text + "m$m");
             MessagesStream.Write(outStreamMessage, 0, outStreamMessage.Length);
             MessagesStream.Flush();
             Thread ctThread = new Thread(getMessage);
             ctThread.Start();
         }
+
         private void UpdateUserList()
         {
-            while (chkListConnectedUsers.Items.Count != 0)
-            {
-                chkListConnectedUsers.Items.RemoveAt(0);
-            }
-
+            List<string> connectedUsers = new List<string>();
+            bool inList = false;
 
             while (returnedUserData.IndexOf("/u/") > 0)
             {
                 length = returnedUserData.Length;
                 length = length - returnedUserData.IndexOf("/u/");
                 oneUsersData = returnedUserData.Substring(0, returnedUserData.IndexOf("/u/"));
-                chkListConnectedUsers.Items.Add(oneUsersData);
+                connectedUsers.Add(oneUsersData);
                 returnedUserData = returnedUserData.Substring(returnedUserData.IndexOf("/u/") + lengthOfPacketCode, (returnedUserData.Length - (returnedUserData.IndexOf("/u/") + lengthOfPacketCode)));
-
             }
 
-            for (int i = 0; i < chkListConnectedUsers.Items.Count; i++)
+            for (int i = 0; i < connectedUsers.Count; i++)
             {
-
-                chkListConnectedUsers.SetItemChecked(i, true);
+                foreach (string item in chkListConnectedUsers.Items)
+                {
+                    if (connectedUsers[i] == item)
+                    {
+                        inList = true;
+                    }
+                }
+                if (inList == false)
+                {
+                    chkListConnectedUsers.Items.Add(connectedUsers[i]);
+                    inList = false;
+                    for (int a= 0; a < chkListConnectedUsers.Items.Count; a++)
+                        if (chkListConnectedUsers.Items[a].Equals(connectedUsers[i]))
+                        {
+                            chkListConnectedUsers.SetItemChecked(a, true);
+                        }
+                }
             }
-
-
         }
         public string GetBroadcastList()
         {
-
-
             foreach (string item in chkListConnectedUsers.CheckedItems)
-                {
+            {
                 broadCastList = broadCastList + item + "b/c";
-                }
-
-                   return broadCastList;
-        }
-
-        private void chkListConnectedUsers_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
+            }
+            return broadCastList;
         }
     }
-   }
+}
 

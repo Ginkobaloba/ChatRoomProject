@@ -50,23 +50,25 @@
             // txtSendMessage
             // 
             this.txtSendMessage.Location = new System.Drawing.Point(20, 543);
+            this.txtSendMessage.Multiline = true;
             this.txtSendMessage.Name = "txtSendMessage";
-            this.txtSendMessage.Size = new System.Drawing.Size(649, 26);
+            this.txtSendMessage.Size = new System.Drawing.Size(649, 34);
             this.txtSendMessage.TabIndex = 1;
             this.txtSendMessage.Visible = false;
             // 
             // txtUserName
             // 
-            this.txtUserName.Location = new System.Drawing.Point(313, 18);
+            this.txtUserName.Location = new System.Drawing.Point(313, 12);
+            this.txtUserName.Multiline = true;
             this.txtUserName.Name = "txtUserName";
-            this.txtUserName.Size = new System.Drawing.Size(356, 26);
+            this.txtUserName.Size = new System.Drawing.Size(356, 32);
             this.txtUserName.TabIndex = 0;
             // 
             // btnSendMessage
             // 
             this.btnSendMessage.Location = new System.Drawing.Point(675, 543);
             this.btnSendMessage.Name = "btnSendMessage";
-            this.btnSendMessage.Size = new System.Drawing.Size(233, 34);
+            this.btnSendMessage.Size = new System.Drawing.Size(240, 34);
             this.btnSendMessage.TabIndex = 3;
             this.btnSendMessage.Text = "Send Message";
             this.btnSendMessage.UseVisualStyleBackColor = true;
@@ -86,7 +88,7 @@
             // lblSetUserName
             // 
             this.lblSetUserName.AutoSize = true;
-            this.lblSetUserName.Location = new System.Drawing.Point(189, 22);
+            this.lblSetUserName.Location = new System.Drawing.Point(189, 19);
             this.lblSetUserName.Name = "lblSetUserName";
             this.lblSetUserName.Size = new System.Drawing.Size(118, 20);
             this.lblSetUserName.TabIndex = 6;
@@ -117,8 +119,6 @@
             this.chkListConnectedUsers.Size = new System.Drawing.Size(236, 487);
             this.chkListConnectedUsers.TabIndex = 11;
             this.chkListConnectedUsers.ThreeDCheckBoxes = true;
-            
-            this.chkListConnectedUsers.SelectedIndexChanged += new System.EventHandler(this.chkListConnectedUsers_SelectedIndexChanged);
             // 
             // frmChatClient
             // 
@@ -133,6 +133,7 @@
             this.Controls.Add(this.txtChatWindow);
             this.Controls.Add(this.lblConnectedUsers);
             this.Name = "frmChatClient";
+            this.Text = "retregtrt";
             this.ResumeLayout(false);
             this.PerformLayout();
 
